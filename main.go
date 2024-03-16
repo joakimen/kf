@@ -18,7 +18,8 @@ func main() {
 	configFilePath := filepath.Join(homeDir, ".config", "kf", "config")
 	fileLines, err := readFileLines(configFilePath)
 	if err != nil {
-		panic(err)
+		_, _ = fmt.Fprintf(os.Stderr, "couldn't read configuration file: %v\n", err)
+		os.Exit(1)
 	}
 
 	uniqueFileLines := unique(fileLines)
