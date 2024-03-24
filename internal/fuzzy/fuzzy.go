@@ -1,13 +1,14 @@
-package main
+package fuzzy
 
 import (
 	"fmt"
+	"github.com/joakimen/kf/internal/syntax"
 	fz "github.com/ktr0731/go-fuzzyfinder"
 	"os"
 )
 
-// Select a known file from a list of known files using fuzzy matching
-func selectFile(files []string) string {
+// SelectFile lets the user select a single known file from a list of known files using fuzzy matching
+func SelectFile(files []string) string {
 
 	renderFunc := func(selectedIndex int) string {
 		return files[selectedIndex]
@@ -23,7 +24,7 @@ func selectFile(files []string) string {
 			return fmt.Sprintf("Error reading file: %s", err)
 		}
 
-		colorizedContents, err := Colorize(file, string(contents))
+		colorizedContents, err := syntax.Colorize(file, string(contents))
 		if err != nil {
 			return fmt.Sprintf("Error colorizing file: %s", err)
 		}

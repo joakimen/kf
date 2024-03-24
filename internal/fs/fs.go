@@ -1,20 +1,19 @@
-package main
+package fs
 
 import (
 	"bufio"
 	"cmp"
 	"errors"
+	"log"
 	"os"
 	"os/exec"
 	"path/filepath"
 )
 
-const (
-	defaultEditor = "nvim"
-)
+const defaultEditor = "nvim"
 
-// readFileLines reads a file and returns its lines as a slice of strings.
-func readFileLines(filename string) ([]string, error) {
+// ReadFileLines reads a file and returns its lines as a slice of slice.
+func ReadFileLines(filename string) ([]string, error) {
 	file, err := os.Open(filename)
 	if err != nil {
 		return nil, err
@@ -39,23 +38,23 @@ func readFileLines(filename string) ([]string, error) {
 	return lines, nil
 }
 
-// fileExists returns true if the file exists and false otherwise.
-func fileExists(filename string) bool {
-	_, err := os.Stat(filename)
-	if os.IsNotExist(err) {
+// IsValidFile returns true if the file exists and is a regular file
+func IsValidFile(filename string) bool {
+	info, err := os.Stat(filename)
+	if err != nil {
 		return false
 	}
-	return err == nil
+	return !info.IsDir()
 }
 
-// getEditorName returns the name of the editor to use for editing files.
-func getEditorName() string {
+// GetEditorName returns the name of the editor to use for editing files.
+func GetEditorName() string {
 	osEditor := os.Getenv("EDITOR")
 	return cmp.Or(osEditor, defaultEditor)
 }
 
-// editFile opens the file at the given path in the user's preferred editor.
-func editFile(editor string, path string) error {
+// EditFile opens the file at the given path in the user's preferred editor.
+func EditFile(editor string, path string) error {
 	cmd := exec.Command(editor, path)
 	cmd.Stdin = os.Stdin
 	cmd.Stdout = os.Stdout
@@ -66,9 +65,8 @@ func editFile(editor string, path string) error {
 	return nil
 }
 
-// expandHome expands a path that starts with ~ to the user's home directory.
-func expandHome(path string) (string, error) {
-
+// RealPath expands home and returns the absolute path of a file
+func RealPath(path string) (string, error) {
 	if path == "" {
 		return "", errors.New("input path cannot be blank")
 	}
@@ -91,4 +89,25 @@ func expandHome(path string) (string, error) {
 	}
 
 	return absPath, nil
+
+}
+
+func AppendToFile(filename string, line string) error {
+
+	file, err := os.OpenFile(filename, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	if err != nil {
+		return err
+	}
+	defer func(file *os.File) {
+		err := file.Close()
+		if err != nil {
+			log.Fatal(err)
+		}
+	}(file)
+
+	// Append the line to the file
+	if _, err := file.WriteString(line + "\n"); err != nil {
+		log.Fatal(err)
+	}
+	return nil
 }
