@@ -30,7 +30,7 @@ var (
 				fmt.Fprintf(os.Stderr, "error appending to configuration file: %v\n", err)
 				os.Exit(1)
 			}
-			fmt.Println("added file:", args[0])
+			fmt.Println("kf: added", args[0])
 		},
 	}
 )
