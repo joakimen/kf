@@ -48,3 +48,4 @@ Add a file to the list of known files
 ```bash
 $ kf add ~/.zshrc
 ```
+test
