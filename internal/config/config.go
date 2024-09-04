@@ -15,12 +15,20 @@ func configFilePath() (string, error) {
 	return filepath.Join(homeDir, ".config", "kf", "config"), nil
 }
 
-func AppendToConfigFile(line string) error {
+func AddEntry(line string) error {
 	configFilePath, err := configFilePath()
 	if err != nil {
 		return err
 	}
 	return fs.AppendToFile(configFilePath, line)
+}
+
+func RemoveEntry(line string) ([]fs.Line, error) {
+	configFilePath, err := configFilePath()
+	if err != nil {
+		return nil, err
+	}
+	return fs.RemoveMatchingLines(configFilePath, line)
 }
 
 func ReadConfigFile() ([]string, error) {

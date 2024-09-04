@@ -12,6 +12,11 @@ import (
 
 const defaultEditor = "nvim"
 
+type Line struct {
+	Number int
+	Text   string
+}
+
 // ReadFileLines reads a file and returns its lines as a slice of slice.
 func ReadFileLines(filename string) ([]string, error) {
 	file, err := os.Open(filename)
@@ -36,6 +41,48 @@ func ReadFileLines(filename string) ([]string, error) {
 	}
 
 	return lines, nil
+}
+
+func RemoveMatchingLines(filename string, pattern string) ([]Line, error) {
+	lines, err := ReadFileLines(filename)
+	if err != nil {
+		return nil, err
+	}
+
+	var linesToKeep []string
+	var removedLines []Line
+	for lineNum, line := range lines {
+		realPath, err := RealPath(line)
+		if err != nil {
+			return nil, err
+		}
+		if pattern == realPath {
+			removedLines = append(removedLines, Line{Number: lineNum, Text: line})
+			continue
+		}
+		linesToKeep = append(linesToKeep, line)
+	}
+
+	file, err := os.Create(filename)
+	if err != nil {
+		return nil, err
+	}
+	defer file.Close()
+
+	writer := bufio.NewWriter(file)
+	for _, line := range linesToKeep {
+		_, err := writer.WriteString(line + "\n")
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	err = writer.Flush()
+	if err != nil {
+		return nil, err
+	}
+
+	return removedLines, nil
 }
 
 // IsValidFile returns true if the file exists and is a regular file
