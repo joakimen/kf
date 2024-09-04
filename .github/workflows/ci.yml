@@ -6,7 +6,7 @@ permissions:
   contents: write
 
 jobs:
-  goreleaser:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -20,6 +20,11 @@ jobs:
 
       - name: Install dependencies
         run: go get .
+
+      - name: lint
+        uses: golangci/golangci-lint-action@v6
+        with:
+          version: v1.60
 
       - name: Build
         run: go build -v ./...
