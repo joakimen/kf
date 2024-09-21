@@ -2,9 +2,10 @@ package config
 
 import (
 	"errors"
-	"github.com/joakimen/kf/internal/fs"
 	"os"
 	"path/filepath"
+
+	"github.com/joakimen/kf/internal/fs"
 )
 
 func configFilePath() (string, error) {

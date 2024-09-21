@@ -2,8 +2,9 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/joakimen/kf/internal/config"
 	"os"
+
+	"github.com/joakimen/kf/internal/config"
 
 	"github.com/spf13/cobra"
 )

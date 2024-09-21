@@ -2,10 +2,11 @@ package cmd
 
 import (
 	"fmt"
+	"os"
+
 	"github.com/joakimen/kf/internal/config"
 	"github.com/joakimen/kf/internal/fs"
 	"github.com/spf13/cobra"
-	"os"
 )
 
 var addCmd = &cobra.Command{
