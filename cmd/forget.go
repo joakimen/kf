@@ -15,20 +15,18 @@ var forgetCmd = &cobra.Command{
 	Args:  cobra.MatchAll(cobra.ExactArgs(1)),
 	Run: func(cmd *cobra.Command, args []string) {
 		fileToRemove := args[0]
-		removedLines, err := userconfig.RemoveEntry(fileToRemove)
+		matchingLineRemoved, err := userconfig.Forget(fileToRemove)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "error removing from configuration file: %v\n", err)
 			os.Exit(1)
 		}
 
-		if len(removedLines) > 0 {
-			fmt.Println("Removed the following entries:")
-			for _, line := range removedLines {
-				fmt.Printf("%3d: %s\n", line.Number, line.Text)
-			}
-		} else {
-			fmt.Println("No matching entries found:", fileToRemove)
+		if matchingLineRemoved {
+			fmt.Println("Removed", fileToRemove)
+			return
 		}
+
+		fmt.Println("No matching entries found. See 'list' command for existing entries.")
 	},
 }
 
