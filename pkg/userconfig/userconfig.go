@@ -13,52 +13,6 @@ import (
 
 var ErrEntryAlreadyExists = errors.New("entry already exists in configuration file")
 
-func Add(knownFile string) error {
-	userConfigLines, err := readUserConfig()
-	if err != nil {
-		return err
-	}
-
-	if slice.Exists(knownFile, userConfigLines) {
-		return ErrEntryAlreadyExists
-	}
-
-	return writeConfigFile(append(userConfigLines, knownFile))
-}
-
-func Forget(knownFile string) (bool, error) {
-	userConfigLines, err := readUserConfig()
-	if err != nil {
-		return false, err
-	}
-
-	var linesToKeep []string
-	removedMatchingLine := false
-	for _, userConfigLine := range userConfigLines {
-		if knownFile == userConfigLine {
-			removedMatchingLine = true
-			continue
-		} else {
-			linesToKeep = append(linesToKeep, userConfigLine)
-		}
-	}
-
-	err = writeConfigFile(linesToKeep)
-	if err != nil {
-		return removedMatchingLine, err
-	}
-
-	return removedMatchingLine, nil
-}
-
-func List() ([]string, error) {
-	configFileLines, err := readUserConfig()
-	if err != nil {
-		return nil, err
-	}
-	return configFileLines, nil
-}
-
 func sanitizeUserConfig(lines []string) []string {
 	uniqueLines := slice.Unique(lines)
 	var knownFiles []string
@@ -72,7 +26,7 @@ func sanitizeUserConfig(lines []string) []string {
 	return knownFiles
 }
 
-func getUserConfigFilePath() (string, error) {
+func GetUserConfigPath() (string, error) {
 	homeDir, err := os.UserHomeDir()
 	if err != nil {
 		return "", err
@@ -80,16 +34,16 @@ func getUserConfigFilePath() (string, error) {
 	return filepath.Join(homeDir, ".config", "kf", "config"), nil
 }
 
-func writeConfigFile(lines []string) error {
-	configFilePath, err := getUserConfigFilePath()
+func WriteUserConfig(lines []string) error {
+	configFilePath, err := GetUserConfigPath()
 	if err != nil {
 		return err
 	}
 	return fs.WriteLines(configFilePath, sanitizeUserConfig(lines))
 }
 
-func readUserConfig() ([]string, error) {
-	configFilePath, err := getUserConfigFilePath()
+func ReadUserConfig() ([]string, error) {
+	configFilePath, err := GetUserConfigPath()
 	if err != nil {
 		return nil, err
 	}
