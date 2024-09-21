@@ -2,16 +2,13 @@
 
 known files
 
-find and edit known files that you edit somewhat regularly.
+manage files that you visit somewhat regularly.
 
 ![img](img.png)
 
 ## Description
 
-1. Reads your known files from a configuration file
-   1. Filters out non-existing files and duplicates
-2. Select file using fuzzy-matching and syntax-highlighted preview
-3. Open selected file in `$EDITOR` or `nvim`
+Manages the files you visit regularly, providing commands for adding, removing, and listing candidates in a configuration file.
 
 ## Configuration
 
@@ -30,15 +27,7 @@ go install github.com/joakimen/kf@latest
 List all known files
 
 ```sh
-$ kf list
-```
-
-### Edit
-
-Edit a known file
-
-```sh
-$ kf edit
+kf list
 ```
 
 ### Add
@@ -46,5 +35,5 @@ $ kf edit
 Add a file to the list of known files
 
 ```bash
-$ kf add ~/.zshrc
+kf add ~/.zshrc
 ```

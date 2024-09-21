@@ -4,7 +4,7 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/joakimen/kf/internal/fs"
+	"github.com/joakimen/kf/pkg/fs"
 )
 
 func unique(fileLines []string) []string {
