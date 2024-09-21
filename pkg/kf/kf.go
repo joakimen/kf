@@ -1,18 +1,26 @@
 package kf
 
 import (
+	"errors"
+
 	"github.com/joakimen/kf/pkg/slice"
 	"github.com/joakimen/kf/pkg/userconfig"
+)
+
+var (
+	ErrEntryAlreadyExists    = errors.New("entry already exists in configuration file")
+	ErrCannotReadUserConfig  = errors.New("error reading configuration file")
+	ErrCannotWriteUserConfig = errors.New("error writing configuration file")
 )
 
 func Add(knownFile string) error {
 	userConfigLines, err := userconfig.ReadUserConfig()
 	if err != nil {
-		return err
+		return errors.Join(ErrCannotReadUserConfig, err)
 	}
 
 	if slice.Exists(knownFile, userConfigLines) {
-		return userconfig.ErrEntryAlreadyExists
+		return ErrEntryAlreadyExists
 	}
 
 	return userconfig.WriteUserConfig(append(userConfigLines, knownFile))
@@ -21,7 +29,7 @@ func Add(knownFile string) error {
 func Forget(knownFile string) (bool, error) {
 	userConfigLines, err := userconfig.ReadUserConfig()
 	if err != nil {
-		return false, err
+		return false, errors.Join(ErrCannotReadUserConfig, err)
 	}
 
 	var linesToKeep []string
@@ -37,7 +45,7 @@ func Forget(knownFile string) (bool, error) {
 
 	err = userconfig.WriteUserConfig(linesToKeep)
 	if err != nil {
-		return removedMatchingLine, err
+		return removedMatchingLine, errors.Join(ErrCannotWriteUserConfig, err)
 	}
 
 	return removedMatchingLine, nil
@@ -46,7 +54,7 @@ func Forget(knownFile string) (bool, error) {
 func List() ([]string, error) {
 	configFileLines, err := userconfig.ReadUserConfig()
 	if err != nil {
-		return nil, err
+		return nil, errors.Join(ErrCannotReadUserConfig, err)
 	}
 	return configFileLines, nil
 }
@@ -54,7 +62,7 @@ func List() ([]string, error) {
 func Config() (string, error) {
 	configFilePath, err := userconfig.GetUserConfigPath()
 	if err != nil {
-		return "", err
+		return "", errors.Join(ErrCannotReadUserConfig, err)
 	}
 	return configFilePath, nil
 }

@@ -4,26 +4,16 @@ import (
 	"errors"
 	"os"
 	"path/filepath"
-	"strings"
 
 	"github.com/joakimen/kf/pkg/slice"
 
 	"github.com/joakimen/kf/pkg/fs"
 )
 
-var ErrEntryAlreadyExists = errors.New("entry already exists in configuration file")
-
 func sanitizeUserConfig(lines []string) []string {
 	uniqueLines := slice.Unique(lines)
-	var knownFiles []string
-	for _, line := range uniqueLines {
-		trimmedLine := strings.TrimSpace(line)
-		if trimmedLine == "" {
-			continue
-		}
-		knownFiles = append(knownFiles, trimmedLine)
-	}
-	return knownFiles
+	trimmedElements := slice.TrimWhitespace(uniqueLines)
+	return trimmedElements
 }
 
 func GetUserConfigPath() (string, error) {
