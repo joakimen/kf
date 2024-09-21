@@ -50,3 +50,11 @@ func List() ([]string, error) {
 	}
 	return configFileLines, nil
 }
+
+func Config() (string, error) {
+	configFilePath, err := userconfig.GetUserConfigPath()
+	if err != nil {
+		return "", err
+	}
+	return configFilePath, nil
+}
