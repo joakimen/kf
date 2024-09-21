@@ -37,7 +37,7 @@ func ReadLines(filename string) ([]string, error) {
 }
 
 func WriteLines(filePath string, lines []string) error {
-	file, err := os.OpenFile(filePath, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0o644)
+	file, err := os.Create(filePath)
 	if err != nil {
 		return err
 	}
