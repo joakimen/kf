@@ -1,4 +1,3 @@
-#---
 run:
   concurrency: 6
   timeout: 5m
@@ -53,12 +52,12 @@ linters:
     - nolintlint
     - nosprintfhostport
     - perfsprint
-    - prealloc
+    # - prealloc    # this is also reported when filtering, so cba
     - predeclared
     - promlinter
     - protogetter
     - reassign
-    - revive
+    # - revive     # reports unused params even when it breaks interfaces, so cba
     - rowserrcheck
     - sloglint
     - sqlclosecheck
