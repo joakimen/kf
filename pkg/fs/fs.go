@@ -2,16 +2,12 @@ package fs
 
 import (
 	"bufio"
-	"cmp"
 	"errors"
 	"fmt"
 	"log"
 	"os"
-	"os/exec"
 	"path/filepath"
 )
-
-const defaultEditor = "nvim"
 
 type Line struct {
 	Number int
@@ -93,24 +89,6 @@ func IsValidFile(filename string) bool {
 		return false
 	}
 	return !info.IsDir()
-}
-
-// GetEditorName returns the name of the editor to use for editing files.
-func GetEditorName() string {
-	osEditor := os.Getenv("EDITOR")
-	return cmp.Or(osEditor, defaultEditor)
-}
-
-// EditFile opens the file at the given path in the user's preferred editor.
-func EditFile(editor string, path string) error {
-	cmd := exec.Command(editor, path)
-	cmd.Stdin = os.Stdin
-	cmd.Stdout = os.Stdout
-	err := cmd.Run()
-	if err != nil {
-		return err
-	}
-	return nil
 }
 
 // RealPath expands home and returns the absolute path of a file

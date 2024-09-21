@@ -1,3 +1,6 @@
+BIN = kf
+BIN_DIR = bin
+
 all: lint-fix lint test
 
 lint:
@@ -11,3 +14,6 @@ test:
 
 install:
 	go install
+
+build:
+	go build -o $(BIN_DIR)/$(BIN) .

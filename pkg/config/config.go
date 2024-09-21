@@ -5,7 +5,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/joakimen/kf/internal/fs"
+	"github.com/joakimen/kf/pkg/fs"
 )
 
 func configFilePath() (string, error) {

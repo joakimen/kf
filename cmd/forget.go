@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/joakimen/kf/internal/config"
+	"github.com/joakimen/kf/pkg/config"
 
 	"github.com/spf13/cobra"
 )

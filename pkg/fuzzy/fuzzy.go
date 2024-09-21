@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/joakimen/kf/internal/syntax"
+	"github.com/joakimen/kf/pkg/syntax"
 	fz "github.com/ktr0731/go-fuzzyfinder"
 )
 
