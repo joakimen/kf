@@ -2,8 +2,9 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/joakimen/kf/pkg/kf"
 	"os"
+
+	"github.com/joakimen/kf/pkg/kf"
 
 	"github.com/spf13/cobra"
 )
