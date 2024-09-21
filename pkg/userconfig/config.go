@@ -1,4 +1,4 @@
-package config
+package userconfig
 
 import (
 	"errors"
@@ -8,16 +8,16 @@ import (
 	"github.com/joakimen/kf/pkg/fs"
 )
 
-func configFilePath() (string, error) {
+func userConfigFilePath() (string, error) {
 	homeDir, err := os.UserHomeDir()
 	if err != nil {
 		return "", err
 	}
-	return filepath.Join(homeDir, ".config", "kf", "config"), nil
+	return filepath.Join(homeDir, ".userconfig", "kf", "userconfig"), nil
 }
 
 func AddEntry(line string) error {
-	configFilePath, err := configFilePath()
+	configFilePath, err := userConfigFilePath()
 	if err != nil {
 		return err
 	}
@@ -25,7 +25,7 @@ func AddEntry(line string) error {
 }
 
 func RemoveEntry(line string) ([]fs.Line, error) {
-	configFilePath, err := configFilePath()
+	configFilePath, err := userConfigFilePath()
 	if err != nil {
 		return nil, err
 	}
@@ -33,7 +33,7 @@ func RemoveEntry(line string) ([]fs.Line, error) {
 }
 
 func ReadConfigFile() ([]string, error) {
-	configFilePath, err := configFilePath()
+	configFilePath, err := userConfigFilePath()
 	if err != nil {
 		return nil, err
 	}

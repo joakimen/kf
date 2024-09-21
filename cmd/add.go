@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/joakimen/kf/pkg/config"
 	"github.com/joakimen/kf/pkg/fs"
+	"github.com/joakimen/kf/pkg/userconfig"
 	"github.com/spf13/cobra"
 )
 
@@ -25,7 +25,7 @@ var addCmd = &cobra.Command{
 			os.Exit(1)
 		}
 
-		err = config.AddEntry(fileToAddAbs)
+		err = userconfig.AddEntry(fileToAddAbs)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "error appending to configuration file: %v\n", err)
 			os.Exit(1)

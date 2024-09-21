@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/joakimen/kf/pkg/config"
+	"github.com/joakimen/kf/pkg/userconfig"
 
 	"github.com/spf13/cobra"
 )
@@ -15,7 +15,7 @@ var forgetCmd = &cobra.Command{
 	Args:  cobra.MatchAll(cobra.ExactArgs(1)),
 	Run: func(cmd *cobra.Command, args []string) {
 		fileToRemove := args[0]
-		removedLines, err := config.RemoveEntry(fileToRemove)
+		removedLines, err := userconfig.RemoveEntry(fileToRemove)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "error removing from configuration file: %v\n", err)
 			os.Exit(1)
