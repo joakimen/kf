@@ -2,19 +2,19 @@ package fuzzy
 
 import (
 	"fmt"
+	"os"
+
 	"github.com/joakimen/kf/internal/syntax"
 	fz "github.com/ktr0731/go-fuzzyfinder"
-	"os"
 )
 
 // SelectFile lets the user select a single known file from a list of known files using fuzzy matching
 func SelectFile(files []string) string {
-
 	renderFunc := func(selectedIndex int) string {
 		return files[selectedIndex]
 	}
 
-	previewFunc := func(selectedIndex, width, height int) string {
+	previewFunc := func(selectedIndex, _, _ int) string {
 		if selectedIndex == -1 {
 			return ""
 		}

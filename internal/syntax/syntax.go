@@ -2,6 +2,7 @@ package syntax
 
 import (
 	"bytes"
+
 	"github.com/alecthomas/chroma/v2"
 	"github.com/alecthomas/chroma/v2/formatters"
 	"github.com/alecthomas/chroma/v2/lexers"
@@ -15,7 +16,6 @@ const (
 
 // Colorize reads a file from the filesystem and returns its contents, colorized
 func Colorize(filename string, contents string) (string, error) {
-
 	lexer := determineLexer(filename, contents)
 	formatter := formatters.Get(formatter)
 	style := styles.Get(style)
@@ -38,7 +38,6 @@ func Colorize(filename string, contents string) (string, error) {
 // determineLexer determines the lexer to use for a given file based on its filename or, alternatively, file contents.
 // If type could not be determined, it falls back to the generic lexer.
 func determineLexer(filename string, contents string) chroma.Lexer {
-
 	filenameLexer := lexers.Match(filename)
 	if filenameLexer != nil {
 		return filenameLexer

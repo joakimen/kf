@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"cmp"
 	"errors"
+	"fmt"
 	"log"
 	"os"
 	"os/exec"
@@ -136,12 +137,10 @@ func RealPath(path string) (string, error) {
 	}
 
 	return absPath, nil
-
 }
 
 func AppendToFile(filename string, line string) error {
-
-	file, err := os.OpenFile(filename, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	file, err := os.OpenFile(filename, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0o644)
 	if err != nil {
 		return err
 	}
@@ -154,7 +153,7 @@ func AppendToFile(filename string, line string) error {
 
 	// Append the line to the file
 	if _, err := file.WriteString(line + "\n"); err != nil {
-		log.Fatal(err)
+		return fmt.Errorf("error writing to file: %w", err)
 	}
 	return nil
 }
