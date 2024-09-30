@@ -2,9 +2,7 @@
 
 known files
 
-manage files that you visit somewhat regularly.
-
-![img](img.png)
+Manage files that you visit somewhat regularly.
 
 ## Description
 
