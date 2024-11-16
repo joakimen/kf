@@ -3,6 +3,7 @@ package kf
 import (
 	"errors"
 
+	"github.com/joakimen/kf/pkg/fs"
 	"github.com/joakimen/kf/pkg/slice"
 	"github.com/joakimen/kf/pkg/userconfig"
 )
@@ -13,16 +14,20 @@ var (
 	ErrCannotWriteUserConfig = errors.New("error writing configuration file")
 )
 
-func Add(knownFile string) error {
+func Add(inputKnownFile string) error {
 	userConfigLines, err := userconfig.ReadUserConfig()
 	if err != nil {
 		return errors.Join(ErrCannotReadUserConfig, err)
 	}
 
+	knownFile, err := fs.SanitizeFilePath(inputKnownFile)
+	if err != nil {
+		return err
+	}
+
 	if slice.Exists(knownFile, userConfigLines) {
 		return ErrEntryAlreadyExists
 	}
-
 	return userconfig.WriteUserConfig(append(userConfigLines, knownFile))
 }
 
