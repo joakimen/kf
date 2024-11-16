@@ -14,13 +14,13 @@ var (
 	ErrCannotWriteUserConfig = errors.New("error writing configuration file")
 )
 
-func Add(inputKnownFile string) error {
+func Add(inputKnownFile string, getenv func(string) string) error {
 	userConfigLines, err := userconfig.ReadUserConfig()
 	if err != nil {
 		return errors.Join(ErrCannotReadUserConfig, err)
 	}
 
-	knownFile, err := fs.SanitizeFilePath(inputKnownFile)
+	knownFile, err := fs.SanitizeFilePath(inputKnownFile, getenv)
 	if err != nil {
 		return err
 	}

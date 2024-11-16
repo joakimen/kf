@@ -60,17 +60,17 @@ func WriteLines(filePath string, lines []string) error {
 	return writer.Flush()
 }
 
-func SanitizeFilePath(inputPath string) (string, error) {
+func SanitizeFilePath(inputPath string, getenv func(string) string) (string, error) {
 	var path string
 
-	homeDir, err := os.UserHomeDir()
-	if err != nil {
-		return "", err
+	homeDir := getenv("HOME")
+	if homeDir == "" {
+		return "", errors.New("HOME not set")
 	}
 
-	curDirAbs, err := os.Getwd()
-	if err != nil {
-		return "", err
+	curDirAbs := getenv("PWD")
+	if curDirAbs == "" {
+		return "", errors.New("PWD not set")
 	}
 
 	// shorten curdir with ~ if curdir is in the home dir
