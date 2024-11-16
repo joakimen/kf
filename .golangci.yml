@@ -116,6 +116,7 @@ linters-settings:
   gosec:
     excludes:
       - G601 # Implicit memory aliasing of items from a range statement, no longer relevant for go 1.22
+      - G101 # erroneously detecting variables named pwdAbs as hardcoded passwords
   gocyclo:
     min-complexity: 40
   godox:
