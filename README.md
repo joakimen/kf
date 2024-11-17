@@ -1,5 +1,7 @@
 # kf
 
+[![ci](https://github.com/joakimen/kf/actions/workflows/ci.yml/badge.svg)](https://github.com/joakimen/kf/actions/workflows/ci.yml) [![GoDoc](https://godoc.org/github.com/joakimen/kf?status.svg)](https://godoc.org/github.com/joakimen/kf) [![Go Report Card](https://goreportcard.com/badge/github.com/joakimen/kf)](https://goreportcard.com/report/github.com/joakimen/kf)
+
 known files
 
 Manage files that you visit somewhat regularly.
@@ -22,7 +24,7 @@ go install github.com/joakimen/kf@latest
 
 ### List
 
-List all known files
+List all known files.
 
 ```sh
 kf list
@@ -30,8 +32,24 @@ kf list
 
 ### Add
 
-Add a file to the list of known files
+Add a file to the list of known files.
 
 ```bash
 kf add ~/.zshrc
+```
+
+### Remove
+
+Remove a file from the list of known files.
+
+```bash
+kf forget ~/.zshrc
+```
+
+### Show config file
+
+Show the path to the configuration file.
+
+```bash
+kf config
 ```
