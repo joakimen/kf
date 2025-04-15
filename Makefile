@@ -1,11 +1,17 @@
 BIN = kf
 BIN_DIR = bin
 
-all: format lint test
+all: format lint test build
+
 
 .PHONY: lint
 lint:
-	golangci-lint run
+	go vet ./...
+	staticcheck ./...
+
+# .PHONY: lint
+# lint:
+# 	golangci-lint run
 
 .PHONY: lint-fix
 lint-fix:
@@ -13,7 +19,7 @@ lint-fix:
 
 .PHONY: test
 test:
-	go test -v ./...
+	go test ./...
 
 .PHONY: install
 install:
