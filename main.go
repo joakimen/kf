@@ -3,7 +3,7 @@ package main
 import (
 	"os"
 
-	"github.com/joakimen/kf/cmd"
+	"github.com/joakimen/kf/cmd/kf/cli"
 )
 
 func main() {
@@ -11,7 +11,7 @@ func main() {
 }
 
 func run(args []string, getenv func(string) string) {
-	app := cmd.NewApp(getenv)
+	app := cli.NewApp(getenv)
 
 	// pass getenv function to the app
 	err := app.Run(args)
