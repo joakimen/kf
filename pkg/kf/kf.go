@@ -60,12 +60,20 @@ func Forget(knownFile string) (bool, error) {
 	return true, nil
 }
 
-func List() ([]string, error) {
+func List(getenv func(string) string) ([]string, error) {
 	configFileLines, err := userconfig.ReadUserConfig()
 	if err != nil {
 		return nil, errors.Join(ErrCannotReadUserConfig, err)
 	}
-	return configFileLines, nil
+	expanded := make([]string, 0, len(configFileLines))
+	for _, line := range configFileLines {
+		p, err := fs.ExpandTilde(line, getenv)
+		if err != nil {
+			return nil, err
+		}
+		expanded = append(expanded, p)
+	}
+	return expanded, nil
 }
 
 func Config() (string, error) {
