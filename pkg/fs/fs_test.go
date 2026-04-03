@@ -21,6 +21,42 @@ func getenv(env string) string {
 	}
 }
 
+func TestExpandTilde(t *testing.T) {
+	tests := []struct {
+		name string
+		got  string
+		want string
+	}{
+		{
+			name: "tilde path should expand to absolute",
+			got:  "~/mydir/file.txt",
+			want: homeDirAbs + "/mydir/file.txt",
+		},
+		{
+			name: "absolute path should be left alone",
+			got:  "/etc/passwd",
+			want: "/etc/passwd",
+		},
+		{
+			name: "tilde only should expand to home dir",
+			got:  "~",
+			want: homeDirAbs,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := ExpandTilde(tt.got, getenv)
+			if err != nil {
+				t.Errorf("ExpandTilde() error = %v", err)
+				return
+			}
+			if got != tt.want {
+				t.Errorf("ExpandTilde() got = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
 func TestExpandFilePath(t *testing.T) {
 	tests := []struct {
 		name string

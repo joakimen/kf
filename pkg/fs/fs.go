@@ -71,6 +71,17 @@ func WriteLines(filePath string, lines []string) error {
 	return os.Rename(tmpPath, filePath)
 }
 
+func ExpandTilde(path string, getenv func(string) string) (string, error) {
+	if !strings.HasPrefix(path, "~") {
+		return path, nil
+	}
+	homeDir := getenv("HOME")
+	if homeDir == "" {
+		return "", errors.New("HOME not set")
+	}
+	return homeDir + path[1:], nil
+}
+
 func SanitizeFilePath(inputPath string, getenv func(string) string) (string, error) {
 	var path string
 
