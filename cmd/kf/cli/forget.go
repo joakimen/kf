@@ -2,8 +2,6 @@ package cli
 
 import (
 	"fmt"
-	"log"
-	"os"
 
 	"github.com/joakimen/kf/pkg/kf"
 	"github.com/urfave/cli/v2"
@@ -15,14 +13,13 @@ func newForgetCmd() *cli.Command {
 		Usage: "Remove a file from the list of known files",
 		Action: func(c *cli.Context) error {
 			if c.NArg() == 0 {
-				log.Fatal("No CLI arguments detected!")
+				return cli.ShowCommandHelp(c, c.Command.Name)
 			}
 
 			fileToRemove := c.Args().First()
 			removed, err := kf.Forget(fileToRemove)
 			if err != nil {
-				fmt.Fprintf(os.Stderr, "failed when removing from list of known files: %v\n", err)
-				os.Exit(1)
+				return fmt.Errorf("failed when removing from list of known files: %w", err)
 			}
 			if removed {
 				fmt.Println("Removed", fileToRemove)

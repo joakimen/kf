@@ -53,20 +53,29 @@ func TestUnique(t *testing.T) {
 		want []string
 	}{
 		{
-			name: "no duplicates",
+			name: "removes duplicates preserving insertion order",
 			args: args{
 				elements: []string{"a", "b", "a", "c", "b"},
 			},
 			want: []string{"a", "b", "c"},
 		},
+		{
+			name: "does not mutate input slice",
+			args: args{
+				elements: []string{"c", "a", "b", "a"},
+			},
+			want: []string{"c", "a", "b"},
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
+			input := slices.Clone(tt.args.elements)
 			got := Unique(tt.args.elements)
-			slices.Sort(got)
-			slices.Sort(tt.want)
 			if !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("Unique() = %v, want %v", got, tt.want)
+			}
+			if !reflect.DeepEqual(tt.args.elements, input) {
+				t.Errorf("Unique() mutated input: got %v, original %v", tt.args.elements, input)
 			}
 		})
 	}

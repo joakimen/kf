@@ -10,12 +10,12 @@ import (
 	"github.com/urfave/cli/v2"
 )
 
-func newEditCmd() *cli.Command {
+func newEditCmd(getenv func(string) string) *cli.Command {
 	return &cli.Command{
 		Name:        "edit",
 		Description: "Edit configuration file",
 		Action: func(c *cli.Context) error {
-			osEditor := os.Getenv("EDITOR")
+			osEditor := getenv("EDITOR")
 			if osEditor == "" {
 				return errors.New("$EDITOR env var is not set")
 			}

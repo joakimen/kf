@@ -18,7 +18,7 @@ func NewApp(getenv func(string) string) cli.App {
 			newConfigCmd(),
 			newAddCmd(getenv),
 			newListCmd(),
-			newEditCmd(),
+			newEditCmd(getenv),
 			newForgetCmd(),
 		},
 	}
