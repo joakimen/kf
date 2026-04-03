@@ -4,6 +4,7 @@ import (
 	"errors"
 	"os"
 	"path/filepath"
+	"sort"
 
 	"github.com/joakimen/kf/pkg/slice"
 
@@ -11,7 +12,9 @@ import (
 )
 
 func sanitizeUserConfig(lines []string) []string {
-	return slice.Unique(slice.TrimWhitespace(lines))
+	result := slice.Unique(slice.TrimWhitespace(lines))
+	sort.Strings(result)
+	return result
 }
 
 func GetUserConfigPath() (string, error) {
