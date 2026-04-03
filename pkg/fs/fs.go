@@ -39,25 +39,36 @@ func ReadLines(filename string) ([]string, error) {
 }
 
 func WriteLines(filePath string, lines []string) error {
-	file, err := os.Create(filePath)
+	if err := os.MkdirAll(filepath.Dir(filePath), 0o700); err != nil {
+		return err
+	}
+
+	tmp, err := os.CreateTemp(filepath.Dir(filePath), ".kf-*")
 	if err != nil {
 		return err
 	}
-	defer func(file *os.File) {
-		closeErr := file.Close()
-		if closeErr != nil {
-			err = errors.Join(err, closeErr)
+	tmpPath := tmp.Name()
+	defer func() {
+		if tmp != nil {
+			tmp.Close()
+			os.Remove(tmpPath)
 		}
-	}(file)
+	}()
 
-	writer := bufio.NewWriter(file)
+	w := bufio.NewWriter(tmp)
 	for _, line := range lines {
-		_, err := writer.WriteString(line + "\n")
-		if err != nil {
+		if _, err := w.WriteString(line + "\n"); err != nil {
 			return err
 		}
 	}
-	return writer.Flush()
+	if err := w.Flush(); err != nil {
+		return err
+	}
+	if err := tmp.Close(); err != nil {
+		return err
+	}
+	tmp = nil
+	return os.Rename(tmpPath, filePath)
 }
 
 func SanitizeFilePath(inputPath string, getenv func(string) string) (string, error) {
@@ -74,7 +85,10 @@ func SanitizeFilePath(inputPath string, getenv func(string) string) (string, err
 	}
 
 	// shorten curdir with ~ if curdir is in the home dir
-	curDir := strings.Replace(curDirAbs, homeDir, "~", 1)
+	curDir := curDirAbs
+	if strings.HasPrefix(curDirAbs, homeDir) {
+		curDir = "~" + curDirAbs[len(homeDir):]
+	}
 	switch {
 	case strings.HasPrefix(inputPath, "/"):
 		// absolute path

@@ -11,9 +11,7 @@ import (
 )
 
 func sanitizeUserConfig(lines []string) []string {
-	uniqueLines := slice.Unique(lines)
-	trimmedElements := slice.TrimWhitespace(uniqueLines)
-	return trimmedElements
+	return slice.Unique(slice.TrimWhitespace(lines))
 }
 
 func GetUserConfigPath() (string, error) {
@@ -39,11 +37,10 @@ func ReadUserConfig() ([]string, error) {
 	}
 	fileLines, err := fs.ReadLines(configFilePath)
 	if err != nil {
+		if errors.Is(err, os.ErrNotExist) {
+			return nil, nil
+		}
 		return nil, err
-	}
-
-	if len(fileLines) == 0 {
-		return nil, errors.New("no files found in configuration file")
 	}
 	return fileLines, nil
 }

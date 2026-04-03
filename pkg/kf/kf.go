@@ -48,12 +48,16 @@ func Forget(knownFile string) (bool, error) {
 		}
 	}
 
-	err = userconfig.WriteUserConfig(linesToKeep)
-	if err != nil {
-		return removedMatchingLine, errors.Join(ErrCannotWriteUserConfig, err)
+	if !removedMatchingLine {
+		return false, nil
 	}
 
-	return removedMatchingLine, nil
+	err = userconfig.WriteUserConfig(linesToKeep)
+	if err != nil {
+		return false, errors.Join(ErrCannotWriteUserConfig, err)
+	}
+
+	return true, nil
 }
 
 func List() ([]string, error) {

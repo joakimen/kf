@@ -1,13 +1,19 @@
 package slice
 
 import (
-	"slices"
 	"strings"
 )
 
 func Unique(elements []string) []string {
-	slices.Sort(elements)
-	return slices.Compact(elements)
+	seen := make(map[string]struct{}, len(elements))
+	result := make([]string, 0, len(elements))
+	for _, e := range elements {
+		if _, ok := seen[e]; !ok {
+			seen[e] = struct{}{}
+			result = append(result, e)
+		}
+	}
+	return result
 }
 
 func TrimWhitespace(elements []string) []string {
