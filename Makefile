@@ -1,34 +1,27 @@
-BIN = kf
-BIN_DIR = bin
+.DEFAULT_GOAL := build
 
-all: format lint test build
+.PHONY: build test lint fmt fmt-check install run clean
 
+build: fmt-check lint test
+	cargo build --release
 
-.PHONY: lint
-lint:
-	go vet ./...
-	staticcheck ./...
-
-# .PHONY: lint
-# lint:
-# 	golangci-lint run
-
-.PHONY: lint-fix
-lint-fix:
-	golangci-lint run --fix
-
-.PHONY: test
 test:
-	go test ./...
+	cargo test
 
-.PHONY: install
+lint:
+	cargo clippy --all-targets -- -D warnings
+
+fmt:
+	cargo fmt
+
+fmt-check:
+	cargo fmt --check
+
 install:
-	go install
+	cargo install --path .
 
-.PHONY: build
-build:
-	go build -o $(BIN_DIR)/$(BIN) .
+run:
+	cargo run -- $(ARGS)
 
-.PHONY: format
-format:
-	gofumpt -l -w .
+clean:
+	cargo clean
