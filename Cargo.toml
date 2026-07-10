@@ -1,0 +1,15 @@
+[package]
+name = "kf"
+version = "0.1.0"
+edition = "2024"
+description = "Manage known files — files you visit regularly"
+license = "MIT"
+repository = "https://github.com/joakimen/kf"
+
+[dependencies]
+anyhow = "1"
+clap = { version = "4", features = ["derive"] }
+inquire = "0.9"
+
+[profile.release]
+strip = true

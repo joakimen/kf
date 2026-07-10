@@ -1,55 +1,48 @@
 # kf
 
-[![ci](https://github.com/joakimen/kf/actions/workflows/ci.yml/badge.svg)](https://github.com/joakimen/kf/actions/workflows/ci.yml) [![GoDoc](https://godoc.org/github.com/joakimen/kf?status.svg)](https://godoc.org/github.com/joakimen/kf) [![Go Report Card](https://goreportcard.com/badge/github.com/joakimen/kf)](https://goreportcard.com/report/github.com/joakimen/kf)
+[![ci](https://github.com/joakimen/kf/actions/workflows/ci.yml/badge.svg)](https://github.com/joakimen/kf/actions/workflows/ci.yml)
 
-known files
+Known files — manage the files you visit regularly.
 
-Manage files that you visit somewhat regularly.
-
-## Description
-
-Manages the files you visit regularly, providing commands for adding, removing, and listing candidates in a configuration file.
-
-## Configuration
-
-The configuration file `~/.config/kf/config` should contain a list of files you want to manage. Each line should contain a file path, such as `/Users/jason/.bashrc`, or `~/.zshrc`.
+`kf` keeps a list of file paths you return to often and provides commands to add,
+list, pick, forget, and prune them.
 
 ## Installation
 
 ```sh
-go install github.com/joakimen/kf@latest
+mise use -g github:joakimen/kf
+```
+
+Or build from source:
+
+```sh
+cargo install --git https://github.com/joakimen/kf
 ```
 
 ## Usage
 
-### List
-
-List all known files.
-
 ```sh
-kf list
+kf add ~/.zshrc          # add a file
+kf list                  # list known files
+kf list --status         # list with ✓/✗ existence indicators
+kf list --missing        # only files that no longer exist
+kf pick                  # fuzzy-pick a file and print its path
+kf forget ~/.zshrc       # remove a file (omit the path to pick interactively)
+kf prune                 # drop entries whose files no longer exist
+kf edit                  # open the config in $EDITOR
+kf config                # print the config file path
 ```
 
-### Add
+Paths under `$HOME` are stored as `~/…`; relative paths are resolved against the
+working directory.
 
-Add a file to the list of known files.
+## Configuration
 
-```bash
-kf add ~/.zshrc
-```
+Entries live one per line in the config file, resolved in this order:
 
-### Remove
+1. `--config <path>`
+2. `$XDG_CONFIG_HOME/kf/config`
+3. `~/.config/kf/config`
 
-Remove a file from the list of known files.
-
-```bash
-kf forget ~/.zshrc
-```
-
-### Show config file
-
-Show the path to the configuration file.
-
-```bash
-kf config
-```
+Colored status output is suppressed when stdout is not a terminal or when
+`NO_COLOR` is set.
