@@ -1,5 +1,8 @@
 # kf
 
+> [!IMPORTANT]
+> Superseded by https://github.com/joakimen/scriv
+
 [![ci](https://github.com/joakimen/kf/actions/workflows/ci.yml/badge.svg)](https://github.com/joakimen/kf/actions/workflows/ci.yml)
 
 Known files — manage the files you visit regularly.
